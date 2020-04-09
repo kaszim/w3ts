@@ -5,9 +5,9 @@ import { MapPlayer } from "./player";
 
 export class Force extends Handle<force> {
 
-  constructor() {
-    if (Handle.initFromHandle()) {
-      super();
+  constructor(handle?: force) {
+    if (type(handle) === "userdata") {
+      super(<force>handle);
     } else {
       super(CreateForce());
     }

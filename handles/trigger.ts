@@ -9,9 +9,9 @@ import { Widget } from "./widget";
 
 export class Trigger extends Handle<trigger> {
 
-  constructor() {
-    if (Handle.initFromHandle()) {
-      super();
+  constructor(handle?: trigger) {
+    if (type(handle) === "userdata") {
+      super(<trigger>handle);
     } else {
       super(CreateTrigger());
     }

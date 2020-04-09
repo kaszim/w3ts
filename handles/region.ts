@@ -7,9 +7,9 @@ import { Unit } from "./unit";
 
 export class Region extends Handle<region> {
 
-  constructor() {
-    if (Handle.initFromHandle()) {
-      super();
+  constructor(handle?: region) {
+    if (type(handle) === "userdata") {
+      super(<region>handle);
     } else {
       super(CreateRegion());
     }

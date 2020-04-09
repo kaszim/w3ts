@@ -5,8 +5,8 @@ import { Handle } from "./handle";
 export class Ubersplat extends Handle<ubersplat> {
 
   constructor(x: number, y: number, name: string, red: number, green: number, blue: number, alpha: number, forcePaused: boolean, noBirthTime: boolean) {
-    if (Handle.initFromHandle()) {
-      super();
+    if (type(x) === "userdata") {
+      super(<ubersplat><unknown>x);
     } else {
       super(CreateUbersplat(x, y, name, red, green, blue, alpha, forcePaused, noBirthTime));
     }

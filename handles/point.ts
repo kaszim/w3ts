@@ -5,8 +5,8 @@ import { Handle } from "./handle";
 export class Point extends Handle<location> {
 
   constructor(x: number, y: number) {
-    if (Handle.initFromHandle()) {
-      super();
+    if (type(x) === "userdata") {
+      super(<location><unknown>handle);
     } else {
       super(Location(x, y));
     }

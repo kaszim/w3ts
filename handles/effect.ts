@@ -10,8 +10,8 @@ export class Effect extends Handle<effect> {
   constructor(modelName: string, x: number, y: number);
   constructor(modelName: string, targetWidget: Widget, attachPointName: string);
   constructor(modelName: string, a: number | Widget, b: number | string) {
-    if (Handle.initFromHandle()) {
-      super();
+    if (type(modelName) === "userdata") {
+      super(<effect><unknown>modelName);
     } else if (typeof a === "number" && typeof b === "number") {
       super(AddSpecialEffect(modelName, a, b));
     } else if (typeof a !== "number" && typeof b === "string") {

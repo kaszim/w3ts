@@ -6,8 +6,8 @@ import { Timer } from "./timer";
 export class TimerDialog extends Handle<timerdialog> {
 
   constructor(t: Timer) {
-    if (Handle.initFromHandle()) {
-      super();
+    if (type(t) === "userdata") {
+      super(<timerdialog><unknown>t);
     } else {
       super(CreateTimerDialog(t.handle));
     }

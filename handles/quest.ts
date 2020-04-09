@@ -5,8 +5,8 @@ import { Handle } from "./handle";
 export class QuestItem extends Handle<questitem> {
 
   constructor(whichQuest: Quest) {
-    if (Handle.initFromHandle()) {
-      super();
+    if (type(whichQuest) === "userdata") {
+      super(<questitem><unknown>whichQuest);
     } else {
       super(QuestCreateItem(whichQuest.handle));
     }
@@ -27,8 +27,12 @@ export class QuestItem extends Handle<questitem> {
 
 export class Quest extends Handle<quest> {
 
-  constructor() {
-    super(Handle.initFromHandle() ? undefined : CreateQuest());
+  constructor(handle?: quest) {
+    if (type(handle) === "userdata") {
+      super(<quest>handle);
+    } else {
+      super(CreateQuest())
+    }
   }
 
   public get completed() {

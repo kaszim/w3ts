@@ -15,8 +15,8 @@ export class Unit extends Widget {
   public readonly handle!: unit;
 
   constructor(owner: MapPlayer | number, unitId: number, x: number, y: number, face: number, skinId?: number) {
-    if (Handle.initFromHandle()) {
-      super();
+    if (type(owner) === "userdata") {
+      super(<unit><unknown>owner);
     } else {
       const p = typeof owner === "number" ? Player(owner) : owner.handle;
       super(skinId ? BlzCreateUnitWithSkin(p, unitId, x, y, face, skinId) : CreateUnit(p, unitId, x, y, face));

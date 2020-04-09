@@ -6,8 +6,8 @@ import { MapPlayer } from "./player";
 export class DialogButton extends Handle<button> {
 
   constructor(whichDialog: Dialog, text: string, hotkey: number = 0, quit: boolean = false, score: boolean = false) {
-    if (Handle.initFromHandle()) {
-      super();
+    if (type(whichDialog) === "userdata") {
+      super(<button><unknown>whichDialog);
     } else if (!quit) {
       super(DialogAddButton(whichDialog.handle, text, hotkey));
     } else {
@@ -22,8 +22,12 @@ export class DialogButton extends Handle<button> {
 
 export class Dialog extends Handle<dialog> {
 
-  constructor() {
-    super(Handle.initFromHandle() ? undefined : DialogCreate());
+  constructor(handle?: dialog) {
+    if (type(handle) === "userdata") {
+      super(<dialog>handle);
+    } else {
+      super(DialogCreate());
+    }
   }
 
   public addButton(text: string, hotkey: number = 0, quit: boolean = false, score: boolean = false) {

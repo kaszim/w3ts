@@ -5,9 +5,9 @@ import { MapPlayer } from "./player";
 
 export class Leaderboard extends Handle<leaderboard> {
 
-  constructor() {
-    if (Handle.initFromHandle()) {
-      super();
+  constructor(handle?: leaderboard) {
+    if (type(handle) === "userdata") {
+      super(<leaderboard>handle);
     } else {
       super(CreateLeaderboard());
     }

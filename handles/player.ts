@@ -7,8 +7,8 @@ import { Point } from "./point";
 export class MapPlayer extends Handle<player> {
 
   private constructor(index: number) {
-    if (Handle.initFromHandle()) {
-      super();
+    if (type(index) === "userdata") {
+      super(<player><unknown>index);
     } else {
       super(Player(index));
     }

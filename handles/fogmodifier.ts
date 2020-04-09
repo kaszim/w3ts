@@ -7,8 +7,8 @@ import { Rectangle } from "./rect";
 export class FogModifier extends Handle<fogmodifier> {
 
   constructor(forWhichPlayer: MapPlayer, whichState: fogstate, centerX: number, centerY: number, radius: number, useSharedVision: boolean, afterUnits: boolean) {
-    if (Handle.initFromHandle()) {
-      super();
+    if (type(forWhichPlayer) === "userdata") {
+      super(<fogmodifier><unknown>forWhichPlayer);
     } else {
       super(CreateFogModifierRadius(forWhichPlayer.handle, whichState, centerX, centerY, radius, useSharedVision, afterUnits));
     }

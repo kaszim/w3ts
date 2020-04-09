@@ -10,8 +10,8 @@ export class Item extends Widget {
   public readonly handle!: item;
 
   constructor(itemId: number, x: number, y: number, skinId?: number) {
-    if (Handle.initFromHandle()) {
-      super();
+    if (type(itemId) === "userdata") {
+      super(<item><unknown>itemId);
     } else {
       super(skinId ? BlzCreateItemWithSkin(itemId, x, y, skinId) : CreateItem(itemId, x, y));
     }

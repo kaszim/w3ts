@@ -8,8 +8,8 @@ export class GameCache extends Handle<gamecache> {
   public readonly filename: string;
 
   constructor(campaignFile: string) {
-    if (Handle.initFromHandle()) {
-      super();
+    if (type(campaignFile) === "userdata") {
+      super(<gamecache><unknown>campaignFile);
     } else {
       super(InitGameCache(campaignFile));
     }

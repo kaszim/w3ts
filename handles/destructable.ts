@@ -8,8 +8,8 @@ export class Destructable extends Widget {
   public readonly handle!: destructable;
 
   constructor(objectId: number, x: number, y: number, z: number, face: number, scale: number, varation: number) {
-    if (Handle.initFromHandle()) {
-      super();
+    if (type(objectId) === "userdata") {
+      super(<destructable><unknown>objectId);
     } else {
       super(CreateDestructableZ(objectId, x, y, z, face, scale, varation));
     }

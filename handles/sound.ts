@@ -5,8 +5,8 @@ import { Handle } from "./handle";
 export class Sound extends Handle<sound> {
 
   constructor(fileName: string, looping: boolean, is3D: boolean, stopWhenOutOfRange: boolean, fadeInRate: number, fadeOutRate: number, eaxSetting: string) {
-    if (Handle.initFromHandle()) {
-      super();
+    if (type(fileName) === "userdata") {
+      super(<sound><unknown>fileName);
     } else {
       super(CreateSound(fileName, looping, is3D, stopWhenOutOfRange, fadeInRate, fadeOutRate, eaxSetting));
     }

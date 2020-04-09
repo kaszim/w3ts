@@ -195,8 +195,12 @@ export class Camera {
 
 export class CameraSetup extends Handle<camerasetup> {
 
-  constructor() {
-    super(Handle.initFromHandle() ? undefined : CreateCameraSetup());
+  constructor(handle?: camerasetup) {
+    if (type(handle) === "userdata") {
+      super(<camerasetup>handle);
+    } else {
+      super(CreateCameraSetup());
+    }
   }
 
   public get destPoint() {

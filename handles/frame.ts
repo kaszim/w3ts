@@ -5,8 +5,8 @@ import { Handle } from "./handle";
 export class Frame extends Handle<framehandle> {
 
   constructor(name: string, owner: Frame, priority: number, createContext: number) {
-    if (Handle.initFromHandle()) {
-      super();
+    if (type(name) === "userdata") {
+      super(<framehandle><unknown>name);
     } else {
       super(BlzCreateFrame(name, owner.handle, priority, createContext));
     }

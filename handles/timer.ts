@@ -4,9 +4,9 @@ import { Handle } from "./handle";
 
 export class Timer extends Handle<timer> {
 
-  constructor() {
-    if (Handle.initFromHandle()) {
-      super();
+  constructor(handle?: timer) {
+    if (type(handle) === "userdata") {
+      super(<timer>handle);
     } else {
       super(CreateTimer());
     }

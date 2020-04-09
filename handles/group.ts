@@ -9,9 +9,9 @@ import { Widget } from "./widget";
 
 export class Group extends Handle<group> {
 
-  constructor() {
-    if (Handle.initFromHandle()) {
-      super();
+  constructor(handle?: group) {
+    if (type(handle) === "userdata") {
+      super(<group>handle);
     } else {
       super(CreateGroup());
     }
