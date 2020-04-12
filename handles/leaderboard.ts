@@ -4,13 +4,40 @@ import { Handle } from "./handle";
 import { MapPlayer } from "./player";
 
 export class Leaderboard extends Handle<leaderboard> {
-
   constructor(handle?: leaderboard) {
     if (type(handle) === "userdata") {
-      super(<leaderboard>handle);
+      super(handle as leaderboard);
     } else {
       super(CreateLeaderboard());
     }
+  }
+
+  public static fromHandle(handle: leaderboard): Leaderboard {
+    return this.getObject(handle);
+  }
+
+  public static fromPlayer(p: MapPlayer) {
+    return this.fromHandle(PlayerGetLeaderboard(p.handle));
+  }
+
+  public get displayed() {
+    return IsLeaderboardDisplayed(this.handle);
+  }
+
+  public get itemCount() {
+    return LeaderboardGetItemCount(this.handle);
+  }
+
+  public set itemCount(count: number) {
+    LeaderboardSetSizeByItemCount(this.handle, count);
+  }
+
+  public get label() {
+    return LeaderboardGetLabelText(this.handle);
+  }
+
+  public set label(value: string) {
+    LeaderboardSetLabel(this.handle, value);
   }
 
   public addItem(label: string, value: number, p: MapPlayer) {
@@ -27,18 +54,6 @@ export class Leaderboard extends Handle<leaderboard> {
 
   public display(flag: boolean = true) {
     LeaderboardDisplay(this.handle, flag);
-  }
-
-  public get displayed() {
-    return IsLeaderboardDisplayed(this.handle);
-  }
-
-  public get itemCount() {
-    return LeaderboardGetItemCount(this.handle);
-  }
-
-  public set itemCount(count: number) {
-    LeaderboardSetSizeByItemCount(this.handle, count);
   }
 
   public getPlayerIndex(p: MapPlayer) {
@@ -85,7 +100,12 @@ export class Leaderboard extends Handle<leaderboard> {
     PlayerSetLeaderboard(p.handle, this.handle);
   }
 
-  public setStyle(showLabel: boolean = true, showNames: boolean = true, showValues: boolean = true, showIcons: boolean = true) {
+  public setStyle(
+    showLabel: boolean = true,
+    showNames: boolean = true,
+    showValues: boolean = true,
+    showIcons: boolean = true
+  ) {
     LeaderboardSetStyle(this.handle, showLabel, showNames, showValues, showIcons);
   }
 
@@ -103,21 +123,5 @@ export class Leaderboard extends Handle<leaderboard> {
 
   public sortByValue(asc: boolean = true) {
     LeaderboardSortItemsByValue(this.handle, asc);
-  }
-
-  public set label(value: string) {
-    LeaderboardSetLabel(this.handle, value);
-  }
-
-  public get label() {
-    return LeaderboardGetLabelText(this.handle);
-  }
-
-  public static fromHandle(handle: leaderboard): Leaderboard {
-    return this.getObject(handle);
-  }
-
-  public static fromPlayer(p: MapPlayer) {
-    return this.fromHandle(PlayerGetLeaderboard(p.handle));
   }
 }

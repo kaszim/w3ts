@@ -1,5 +1,4 @@
 export class BinaryReader {
-
   public readonly data: string;
   private pos: number = 1;
 
@@ -53,5 +52,4 @@ export class BinaryReader {
   public readUInt8(): number {
     return this.read(">B", 1);
   }
-
 }

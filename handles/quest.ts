@@ -3,17 +3,12 @@
 import { Handle } from "./handle";
 
 export class QuestItem extends Handle<questitem> {
-
   constructor(whichQuest: Quest) {
     if (type(whichQuest) === "userdata") {
-      super(<questitem><unknown>whichQuest);
+      super((whichQuest as unknown) as questitem);
     } else {
       super(QuestCreateItem(whichQuest.handle));
     }
-  }
-
-  public setDescription(description: string) {
-    QuestItemSetDescription(this.handle, description);
   }
 
   public get completed() {
@@ -23,16 +18,31 @@ export class QuestItem extends Handle<questitem> {
   public set completed(completed: boolean) {
     QuestItemSetCompleted(this.handle, completed);
   }
+
+  public setDescription(description: string) {
+    QuestItemSetDescription(this.handle, description);
+  }
 }
 
 export class Quest extends Handle<quest> {
-
   constructor(handle?: quest) {
     if (type(handle) === "userdata") {
-      super(<quest>handle);
+      super(handle as quest);
     } else {
-      super(CreateQuest())
+      super(CreateQuest());
     }
+  }
+
+  public static flashQuestDialogButton() {
+    FlashQuestDialogButton();
+  }
+
+  public static forceQuestDialogUpdate() {
+    ForceQuestDialogUpdate();
+  }
+
+  public static fromHandle(handle: quest): Quest {
+    return this.getObject(handle);
   }
 
   public get completed() {
@@ -98,17 +108,4 @@ export class Quest extends Handle<quest> {
   public setTitle(title: string) {
     QuestSetTitle(this.handle, title);
   }
-
-  public static flashQuestDialogButton() {
-    FlashQuestDialogButton();
-  }
-
-  public static forceQuestDialogUpdate() {
-    ForceQuestDialogUpdate();
-  }
-
-  public static fromHandle(handle: quest): Quest {
-    return this.getObject(handle);
-  }
-
 }

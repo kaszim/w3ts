@@ -5,21 +5,44 @@ import { Handle } from "./handle";
 import { Point } from "./point";
 
 export class MapPlayer extends Handle<player> {
-
   private constructor(index: number) {
     if (type(index) === "userdata") {
-      super(<player><unknown>index);
+      super((index as unknown) as player);
     } else {
       super(Player(index));
     }
   }
 
-  public set color(color: playercolor) {
-    SetPlayerColor(this.handle, color);
+  public static fromEnum() {
+    return MapPlayer.fromHandle(GetEnumPlayer());
+  }
+
+  public static fromEvent() {
+    return MapPlayer.fromHandle(GetTriggerPlayer());
+  }
+
+  public static fromFilter() {
+    return MapPlayer.fromHandle(GetFilterPlayer());
+  }
+
+  public static fromHandle(handle: player): MapPlayer {
+    return this.getObject(handle);
+  }
+
+  public static fromIndex(index: number) {
+    return this.fromHandle(Player(index));
+  }
+
+  public static fromLocal() {
+    return this.fromHandle(GetLocalPlayer());
   }
 
   public get color() {
     return GetPlayerColor(this.handle);
+  }
+
+  public set color(color: playercolor) {
+    SetPlayerColor(this.handle, color);
   }
 
   public get controller() {
@@ -66,16 +89,16 @@ export class MapPlayer extends Handle<player> {
     return GetPlayerStartLocation(this.handle);
   }
 
+  public get startLocationPoint() {
+    return GetStartLocationLoc(this.startLocation);
+  }
+
   public get startLocationX() {
     return GetStartLocationX(this.startLocation);
   }
 
   public get startLocationY() {
     return GetStartLocationY(this.startLocation);
-  }
-
-  public get startLocationPoint() {
-    return GetStartLocationLoc(this.startLocation);
   }
 
   public get team() {
@@ -227,29 +250,4 @@ export class MapPlayer extends Handle<player> {
   public setUnitsOwner(newOwner: number) {
     SetPlayerUnitsOwner(this.handle, newOwner);
   }
-
-  public static fromEnum() {
-    return MapPlayer.fromHandle(GetEnumPlayer());
-  }
-
-  public static fromEvent() {
-    return MapPlayer.fromHandle(GetTriggerPlayer());
-  }
-
-  public static fromFilter() {
-    return MapPlayer.fromHandle(GetFilterPlayer());
-  }
-
-  public static fromHandle(handle: player): MapPlayer {
-    return this.getObject(handle);
-  }
-
-  public static fromIndex(index: number) {
-    return this.fromHandle(Player(index));
-  }
-
-  public static fromLocal() {
-    return this.fromHandle(GetLocalPlayer());
-  }
-
 }

@@ -11,10 +11,6 @@ export class Handle<T extends handle> {
     map.set(this.handle, this);
   }
 
-  public get id() {
-    return GetHandleId(this.handle);
-  }
-
   protected static getObject(handle: handle) {
     const obj = map.get(handle);
     if (obj !== undefined) {
@@ -22,6 +18,10 @@ export class Handle<T extends handle> {
     }
     const newObj = new this(handle);
     return newObj;
+  }
+
+  public get id() {
+    return GetHandleId(this.handle);
   }
 
 }

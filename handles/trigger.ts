@@ -8,13 +8,28 @@ import { Unit } from "./unit";
 import { Widget } from "./widget";
 
 export class Trigger extends Handle<trigger> {
-
   constructor(handle?: trigger) {
     if (type(handle) === "userdata") {
-      super(<trigger>handle);
+      super(handle as trigger);
     } else {
       super(CreateTrigger());
     }
+  }
+
+  public static fromEvent() {
+    return this.fromHandle(GetTriggeringTrigger());
+  }
+
+  public static fromHandle(handle: trigger): Trigger {
+    return this.getObject(handle);
+  }
+
+  public static get eventId() {
+    return GetTriggerEventId();
+  }
+
+  public get enabled() {
+    return IsTriggerEnabled(this.handle);
   }
 
   public set enabled(flag: boolean) {
@@ -25,28 +40,20 @@ export class Trigger extends Handle<trigger> {
     }
   }
 
-  public get enabled() {
-    return IsTriggerEnabled(this.handle);
-  }
-
   public get evalCount() {
     return GetTriggerEvalCount(this.handle);
-  }
-
-  public static get eventId() {
-    return GetTriggerEventId();
   }
 
   public get execCount() {
     return GetTriggerExecCount(this.handle);
   }
 
-  public set waitOnSleeps(flag: boolean) {
-    TriggerWaitOnSleeps(this.handle, flag);
-  }
-
   public get waitOnSleeps() {
     return IsTriggerWaitOnSleeps(this.handle);
+  }
+
+  public set waitOnSleeps(flag: boolean) {
+    TriggerWaitOnSleeps(this.handle, flag);
   }
 
   public addAction(actionFunc: () => void) {
@@ -137,7 +144,11 @@ export class Trigger extends Handle<trigger> {
     return BlzTriggerRegisterPlayerSyncEvent(this.handle, whichPlayer.handle, prefix, fromServer);
   }
 
-  public registerPlayerUnitEvent(whichPlayer: MapPlayer, whichPlayerUnitEvent: playerunitevent, filter: boolexpr | null) {
+  public registerPlayerUnitEvent(
+    whichPlayer: MapPlayer,
+    whichPlayerUnitEvent: playerunitevent,
+    filter: boolexpr | null
+  ) {
     return TriggerRegisterPlayerUnitEvent(this.handle, whichPlayer.handle, whichPlayerUnitEvent, filter);
   }
 
@@ -202,13 +213,4 @@ export class Trigger extends Handle<trigger> {
   public triggerRegisterFrameEvent(frame: Frame, eventId: frameeventtype) {
     return BlzTriggerRegisterFrameEvent(this.handle, frame.handle, eventId);
   }
-
-  public static fromEvent() {
-    return this.fromHandle(GetTriggeringTrigger());
-  }
-
-  public static fromHandle(handle: trigger): Trigger {
-    return this.getObject(handle);
-  }
-
 }

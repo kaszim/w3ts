@@ -4,64 +4,7 @@ import { Handle } from "./handle";
 import { Point } from "./point";
 
 export class Camera {
-
-  private constructor() { }
-
-  public static set visible(flag: boolean) {
-    DisplayCineFilter(flag);
-  }
-
-  public static get visible() {
-    return IsCineFilterDisplayed();
-  }
-
-  public static get boundMinX() {
-    return GetCameraBoundMinX();
-  }
-
-  public static get boundMinY() {
-    return GetCameraBoundMinY();
-  }
-
-  public static get boundMaxX() {
-    return GetCameraBoundMaxX();
-  }
-
-  public static get boundMaxY() {
-    return GetCameraBoundMaxY();
-  }
-
-  public static get targetX() {
-    return GetCameraTargetPositionX();
-  }
-
-  public static get targetY() {
-    return GetCameraTargetPositionY();
-  }
-
-  public static get targetZ() {
-    return GetCameraTargetPositionZ();
-  }
-
-  public static get eyeX() {
-    return GetCameraEyePositionX();
-  }
-
-  public static get eyeY() {
-    return GetCameraEyePositionY();
-  }
-
-  public static get eyeZ() {
-    return GetCameraEyePositionZ();
-  }
-
-  public static get eyePoint() {
-    return GetCameraEyePositionLoc();
-  }
-
-  public static get targetPoint() {
-    return Point.fromHandle(GetCameraTargetPositionLoc());
-  }
+  private constructor() {}
 
   public static adjustField(whichField: camerafield, offset: number, duration: number) {
     AdjustCameraField(whichField, offset, duration);
@@ -99,7 +42,16 @@ export class Camera {
     ResetToGameCamera(duration);
   }
 
-  public static setBounds(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, x4: number, y4: number) {
+  public static setBounds(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    x3: number,
+    y3: number,
+    x4: number,
+    y4: number
+  ) {
     SetCameraBounds(x1, y1, x2, y2, x3, y3, x4, y4);
   }
 
@@ -147,7 +99,14 @@ export class Camera {
     SetCinematicCamera(cameraModelFile);
   }
 
-  public static SetCinematicScene(portraitUnitId: number, color: playercolor, speakerTitle: string, text: string, sceneDuration: number, voiceoverDuration: number) {
+  public static SetCinematicScene(
+    portraitUnitId: number,
+    color: playercolor,
+    speakerTitle: string,
+    text: string,
+    sceneDuration: number,
+    voiceoverDuration: number
+  ) {
     SetCinematicScene(portraitUnitId, color, speakerTitle, text, sceneDuration, voiceoverDuration);
   }
 
@@ -191,16 +150,74 @@ export class Camera {
     StopCamera();
   }
 
+  public static get boundMaxX() {
+    return GetCameraBoundMaxX();
+  }
+
+  public static get boundMaxY() {
+    return GetCameraBoundMaxY();
+  }
+
+  public static get boundMinX() {
+    return GetCameraBoundMinX();
+  }
+
+  public static get boundMinY() {
+    return GetCameraBoundMinY();
+  }
+
+  public static get eyePoint() {
+    return GetCameraEyePositionLoc();
+  }
+
+  public static get eyeX() {
+    return GetCameraEyePositionX();
+  }
+
+  public static get eyeY() {
+    return GetCameraEyePositionY();
+  }
+
+  public static get eyeZ() {
+    return GetCameraEyePositionZ();
+  }
+
+  public static get targetPoint() {
+    return Point.fromHandle(GetCameraTargetPositionLoc());
+  }
+
+  public static get targetX() {
+    return GetCameraTargetPositionX();
+  }
+
+  public static get targetY() {
+    return GetCameraTargetPositionY();
+  }
+
+  public static get targetZ() {
+    return GetCameraTargetPositionZ();
+  }
+
+  public static get visible() {
+    return IsCineFilterDisplayed();
+  }
+
+  public static set visible(flag: boolean) {
+    DisplayCineFilter(flag);
+  }
 }
 
 export class CameraSetup extends Handle<camerasetup> {
-
   constructor(handle?: camerasetup) {
     if (type(handle) === "userdata") {
-      super(<camerasetup>handle);
+      super(handle as camerasetup);
     } else {
       super(CreateCameraSetup());
     }
+  }
+
+  public static fromHandle(handle: camerasetup): camerasetup {
+    return this.getObject(handle);
   }
 
   public get destPoint() {
@@ -223,12 +240,12 @@ export class CameraSetup extends Handle<camerasetup> {
     CameraSetupSetDestPosition(this.handle, this.destX, y, 0);
   }
 
-  public set label(label: string) {
-    BlzCameraSetupSetLabel(this.handle, label);
-  }
-
   public get label() {
     return BlzCameraSetupGetLabel(this.handle);
+  }
+
+  public set label(label: string) {
+    BlzCameraSetupSetLabel(this.handle, label);
   }
 
   public apply(doPan: boolean, panTimed: boolean) {
@@ -239,9 +256,21 @@ export class CameraSetup extends Handle<camerasetup> {
     CameraSetupApplyForceDuration(this.handle, doPan, forceDuration);
   }
 
-  public applyForceDurationSmooth(doPan: boolean, forcedDuration: number, easeInDuration: number, easeOutDuration: number, smoothFactor: number) {
-    BlzCameraSetupApplyForceDurationSmooth(this.handle, doPan, forcedDuration, easeInDuration, easeOutDuration, smoothFactor);
-
+  public applyForceDurationSmooth(
+    doPan: boolean,
+    forcedDuration: number,
+    easeInDuration: number,
+    easeOutDuration: number,
+    smoothFactor: number
+  ) {
+    BlzCameraSetupApplyForceDurationSmooth(
+      this.handle,
+      doPan,
+      forcedDuration,
+      easeInDuration,
+      easeOutDuration,
+      smoothFactor
+    );
   }
 
   public applyForceDurationZ(zDestOffset: number, forceDuration: number) {
@@ -263,9 +292,4 @@ export class CameraSetup extends Handle<camerasetup> {
   public setField(whichField: camerafield, value: number, duration: number) {
     CameraSetupSetField(this.handle, whichField, value, duration);
   }
-
-  public static fromHandle(handle: camerasetup): camerasetup {
-    return this.getObject(handle);
-  }
-
 }

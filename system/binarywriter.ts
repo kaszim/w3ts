@@ -1,5 +1,4 @@
 export class BinaryWriter {
-
   public readonly values: any[] = [];
   private fmj = ">";
 
@@ -51,5 +50,4 @@ export class BinaryWriter {
     this.fmj += "B";
     this.values.push(value);
   }
-
 }

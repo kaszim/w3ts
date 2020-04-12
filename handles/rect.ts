@@ -4,13 +4,25 @@ import { Handle } from "./handle";
 import { Point } from "./point";
 
 export class Rectangle extends Handle<rect> {
-
   constructor(minX: number, minY: number, maxX: number, maxY: number) {
     if (type(minX) === "userdata") {
-      super(<rect><unknown>minX);
+      super((minX as unknown) as rect);
     } else {
       super(Rect(minX, minY, maxX, maxY));
     }
+  }
+
+  public static fromHandle(handle: rect): Rectangle {
+    return this.getObject(handle);
+  }
+
+  public static fromPoint(min: Point, max: Point) {
+    return this.fromHandle(RectFromLoc(min.handle, max.handle));
+  }
+
+  // Returns full map bounds, including unplayable borders, in world coordinates
+  public static getWorldBounds() {
+    return Rectangle.fromHandle(GetWorldBounds());
   }
 
   public get centerX() {
@@ -64,18 +76,4 @@ export class Rectangle extends Handle<rect> {
   public setRectFromPoint(min: Point, max: Point) {
     SetRectFromLoc(this.handle, min.handle, max.handle);
   }
-
-  public static fromHandle(handle: rect): Rectangle {
-    return this.getObject(handle);
-  }
-
-  public static fromPoint(min: Point, max: Point) {
-    return this.fromHandle(RectFromLoc(min.handle, max.handle));
-  }
-
-  // Returns full map bounds, including unplayable borders, in world coordinates
-  public static getWorldBounds() {
-    return Rectangle.fromHandle(GetWorldBounds());
-  }
-
 }

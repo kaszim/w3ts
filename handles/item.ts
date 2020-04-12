@@ -1,20 +1,34 @@
 /** @noSelfInFile **/
 
-import { Handle } from "./handle";
 import { MapPlayer } from "./player";
 import { Point } from "./point";
 import { Widget } from "./widget";
 
 export class Item extends Widget {
-
   public readonly handle!: item;
 
   constructor(itemId: number, x: number, y: number, skinId?: number) {
     if (type(itemId) === "userdata") {
-      super(<item><unknown>itemId);
+      super((itemId as unknown) as item);
     } else {
       super(skinId ? BlzCreateItemWithSkin(itemId, x, y, skinId) : CreateItem(itemId, x, y));
     }
+  }
+
+  public static fromHandle(handle: item): Item {
+    return this.getObject(handle);
+  }
+
+  public static isIdPawnable(itemId: number) {
+    return IsItemIdPawnable(itemId);
+  }
+
+  public static isIdPowerup(itemId: number) {
+    return IsItemIdPowerup(itemId);
+  }
+
+  public static isIdSellable(itemId: number) {
+    return IsItemIdSellable(itemId);
   }
 
   public get charges() {
@@ -25,12 +39,12 @@ export class Item extends Widget {
     SetItemCharges(this.handle, value);
   }
 
-  public set invulnerable(flag: boolean) {
-    SetItemInvulnerable(this.handle, true);
-  }
-
   public get invulnerable() {
     return IsItemInvulnerable(this.handle);
+  }
+
+  public set invulnerable(flag: boolean) {
+    SetItemInvulnerable(this.handle, true);
   }
 
   public get level() {
@@ -57,6 +71,14 @@ export class Item extends Widget {
     return GetItemPlayer(this.handle);
   }
 
+  public get skin() {
+    return BlzGetItemSkin(this.handle);
+  }
+
+  public set skin(skinId: number) {
+    BlzSetItemSkin(this.handle, skinId);
+  }
+
   public get type() {
     return GetItemType(this.handle);
   }
@@ -79,14 +101,6 @@ export class Item extends Widget {
 
   public set visible(flag: boolean) {
     SetItemVisible(this.handle, flag);
-  }
-
-  public get skin() {
-    return BlzGetItemSkin(this.handle);
-  }
-
-  public set skin(skinId: number) {
-    BlzSetItemSkin(this.handle, skinId);
   }
 
   public get x() {
@@ -154,7 +168,10 @@ export class Item extends Widget {
     SetItemDroppable(this.handle, flag);
   }
 
-  public setField(field: itembooleanfield | itemintegerfield | itemrealfield | itemstringfield, value: boolean | number | string) {
+  public setField(
+    field: itembooleanfield | itemintegerfield | itemrealfield | itemstringfield,
+    value: boolean | number | string
+  ) {
     const fieldType = field.toString().substr(0, field.toString().indexOf(":"));
 
     if (fieldType === "unitbooleanfield" && typeof value === "boolean") {
@@ -181,21 +198,4 @@ export class Item extends Widget {
   public setPosition(x: number, y: number) {
     SetItemPosition(this.handle, x, y);
   }
-
-  public static fromHandle(handle: item): Item {
-    return this.getObject(handle);
-  }
-
-  public static isIdPawnable(itemId: number) {
-    return IsItemIdPawnable(itemId);
-  }
-
-  public static isIdPowerup(itemId: number) {
-    return IsItemIdPowerup(itemId);
-  }
-
-  public static isIdSellable(itemId: number) {
-    return IsItemIdSellable(itemId);
-  }
-
 }

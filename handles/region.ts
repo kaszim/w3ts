@@ -6,13 +6,16 @@ import { Rectangle } from "./rect";
 import { Unit } from "./unit";
 
 export class Region extends Handle<region> {
-
   constructor(handle?: region) {
     if (type(handle) === "userdata") {
-      super(<region>handle);
+      super(handle as region);
     } else {
       super(CreateRegion());
     }
+  }
+
+  public static fromHandle(handle: region): Region {
+    return this.getObject(handle);
   }
 
   public addCell(x: number, y: number) {
@@ -54,9 +57,4 @@ export class Region extends Handle<region> {
   public destroy() {
     RemoveRegion(this.handle);
   }
-
-  public static fromHandle(handle: region): Region {
-    return this.getObject(handle);
-  }
-
 }

@@ -4,6 +4,14 @@ import { Handle } from "./handle";
 
 export class Widget extends Handle<widget> {
 
+  public static fromEvent() {
+    return this.fromHandle(GetTriggerWidget());
+  }
+
+  public static fromHandle(handle: widget): Widget {
+    return this.getObject(handle);
+  }
+
   public get life() {
     return GetWidgetLife(this.handle);
   }
@@ -18,14 +26,6 @@ export class Widget extends Handle<widget> {
 
   public get y() {
     return GetWidgetY(this.handle);
-  }
-
-  public static fromEvent() {
-    return this.fromHandle(GetTriggerWidget());
-  }
-
-  public static fromHandle(handle: widget): Widget {
-    return this.getObject(handle);
   }
 
 }

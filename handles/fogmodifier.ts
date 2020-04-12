@@ -5,13 +5,46 @@ import { MapPlayer } from "./player";
 import { Rectangle } from "./rect";
 
 export class FogModifier extends Handle<fogmodifier> {
-
-  constructor(forWhichPlayer: MapPlayer, whichState: fogstate, centerX: number, centerY: number, radius: number, useSharedVision: boolean, afterUnits: boolean) {
+  constructor(
+    forWhichPlayer: MapPlayer,
+    whichState: fogstate,
+    centerX: number,
+    centerY: number,
+    radius: number,
+    useSharedVision: boolean,
+    afterUnits: boolean
+  ) {
     if (type(forWhichPlayer) === "userdata") {
-      super(<fogmodifier><unknown>forWhichPlayer);
+      super((forWhichPlayer as unknown) as fogmodifier);
     } else {
-      super(CreateFogModifierRadius(forWhichPlayer.handle, whichState, centerX, centerY, radius, useSharedVision, afterUnits));
+      super(
+        CreateFogModifierRadius(
+          forWhichPlayer.handle,
+          whichState,
+          centerX,
+          centerY,
+          radius,
+          useSharedVision,
+          afterUnits
+        )
+      );
     }
+  }
+
+  public static fromHandle(handle: fogmodifier): FogModifier {
+    return this.getObject(handle);
+  }
+
+  public static fromRect(
+    forWhichPlayer: MapPlayer,
+    whichState: fogstate,
+    where: Rectangle,
+    useSharedVision: boolean,
+    afterUnits: boolean
+  ): FogModifier {
+    return this.fromHandle(
+      CreateFogModifierRect(forWhichPlayer.handle, whichState, where.handle, useSharedVision, afterUnits)
+    );
   }
 
   public destroy() {
@@ -25,13 +58,4 @@ export class FogModifier extends Handle<fogmodifier> {
   public stop() {
     FogModifierStop(this.handle);
   }
-
-  public static fromHandle(handle: fogmodifier): FogModifier {
-    return this.getObject(handle);
-  }
-
-  public static fromRect(forWhichPlayer: MapPlayer, whichState: fogstate, where: Rectangle, useSharedVision: boolean, afterUnits: boolean): FogModifier {
-    return this.fromHandle(CreateFogModifierRect(forWhichPlayer.handle, whichState, where.handle, useSharedVision, afterUnits));
-  }
-
 }

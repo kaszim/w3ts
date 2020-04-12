@@ -15,7 +15,7 @@ const SYNC_MAX_CHUNK_SIZE = 244;
 export const enum SyncStatus {
   Syncing,
   Success,
-  Timeout
+  Timeout,
 }
 
 export interface ISyncResponse {
@@ -80,6 +80,13 @@ class SyncOutgoingPacket {
 }
 
 export class SyncRequest {
+  private static readonly cache: SyncRequest[] = [];
+  private static counter = 0;
+  private static defaultOptions: ISyncOptions = { timeout: 0 };
+  private static eventTrigger = new Trigger();
+  private static index = 0;
+  private static indicies: number[] = [];
+  private static initialized = false;
   public readonly from: MapPlayer;
   public readonly id: number;
   public readonly options: ISyncOptions;
@@ -89,13 +96,6 @@ export class SyncRequest {
   private onError?: SyncCallback;
   private onResponse?: SyncCallback;
   private status: SyncStatus;
-  private static readonly cache: SyncRequest[] = [];
-  private static counter = 0;
-  private static defaultOptions: ISyncOptions = { timeout: 0 };
-  private static eventTrigger = new Trigger();
-  private static index = 0;
-  private static indicies: number[] = [];
-  private static initialized = false;
 
   /**
    * Creates a new sync request and immediately attempts to send the data.
@@ -141,6 +141,58 @@ export class SyncRequest {
   }
 
   /**
+   * Retrieve a request based on it's index
+   * @param index The request index
+   */
+  public static fromIndex(index: number) {
+    return this.cache[index];
+  }
+
+  /**
+   * Initialize
+   */
+  public static init() {
+    if (this.initialized) {
+      return;
+    }
+    for (let i = 0; i < bj_MAX_PLAYER_SLOTS; i++) {
+      const p = MapPlayer.fromIndex(i);
+      if (p.controller === MAP_CONTROL_USER && p.slotState === PLAYER_SLOT_STATE_PLAYING) {
+        this.eventTrigger.registerPlayerSyncEvent(p, SYNC_PREFIX, false);
+        this.eventTrigger.registerPlayerSyncEvent(p, SYNC_PREFIX_CHUNK, false);
+      }
+    }
+    this.eventTrigger.addAction(() => {
+      this.onSync();
+    });
+    this.initialized = true;
+  }
+
+  /**
+   * Handler for all sync responses
+   */
+  private static onSync() {
+    const packet = new SyncIncomingPacket(BlzGetTriggerSyncPrefix(), BlzGetTriggerSyncData());
+
+    if (!packet.req) {
+      return;
+    }
+
+    packet.req.currentChunk++;
+    packet.req.chunks[packet.chunk] = packet.data;
+
+    if (packet.chunk >= packet.chunks) {
+      if (packet.req.onResponse) {
+        const data = packet.req.chunks.join("");
+        const status = SyncStatus.Success;
+        packet.req.status = SyncStatus.Success;
+        packet.req.recycle();
+        packet.req.onResponse({ data, status, time: getElapsedTime() }, packet.req);
+      }
+    }
+  }
+
+  /**
    * Sets the callback for when a request failed.
    * @param callback
    */
@@ -181,63 +233,13 @@ export class SyncRequest {
   }
 
   /**
- * Encode and send the data from the correct player.
- * @param data
- */
+   * Encode and send the data from the correct player.
+   * @param data
+   */
   private send(packet: SyncOutgoingPacket) {
     const prefix = packet.chunk === -1 ? SYNC_PREFIX : SYNC_PREFIX_CHUNK;
     if (this.from === MapPlayer.fromLocal() && !BlzSendSyncData(prefix, packet.toString())) {
       print("SyncData: Network Error");
-    }
-  }
-
-  /**
-   * Retrieve a request based on it's index
-   * @param index The request index
-   */
-  public static fromIndex(index: number) {
-    return this.cache[index];
-  }
-
-  /**
-   * Initialize
-   */
-  public static init() {
-    if (this.initialized) {
-      return;
-    }
-    for (let i = 0; i < bj_MAX_PLAYER_SLOTS; i++) {
-      const p = MapPlayer.fromIndex(i);
-      if (p.controller === MAP_CONTROL_USER && p.slotState === PLAYER_SLOT_STATE_PLAYING) {
-        this.eventTrigger.registerPlayerSyncEvent(p, SYNC_PREFIX, false);
-        this.eventTrigger.registerPlayerSyncEvent(p, SYNC_PREFIX_CHUNK, false);
-      }
-    }
-    this.eventTrigger.addAction(() => { this.onSync(); });
-    this.initialized = true;
-  }
-
-  /**
-   * Handler for all sync responses
-   */
-  private static onSync() {
-    const packet = new SyncIncomingPacket(BlzGetTriggerSyncPrefix(), BlzGetTriggerSyncData());
-
-    if (!packet.req) {
-      return;
-    }
-
-    packet.req.currentChunk++;
-    packet.req.chunks[packet.chunk] = packet.data;
-
-    if (packet.chunk >= packet.chunks) {
-      if (packet.req.onResponse) {
-        const data = packet.req.chunks.join("");
-        const status = SyncStatus.Success;
-        packet.req.status = SyncStatus.Success;
-        packet.req.recycle();
-        packet.req.onResponse({ data, status, time: getElapsedTime() }, packet.req);
-      }
     }
   }
 }

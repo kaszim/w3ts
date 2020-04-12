@@ -4,13 +4,16 @@ import { Handle } from "./handle";
 import { Timer } from "./timer";
 
 export class TimerDialog extends Handle<timerdialog> {
-
   constructor(t: Timer) {
     if (type(t) === "userdata") {
-      super(<timerdialog><unknown>t);
+      super((t as unknown) as timerdialog);
     } else {
       super(CreateTimerDialog(t.handle));
     }
+  }
+
+  public static fromHandle(handle: timerdialog): TimerDialog {
+    return this.getObject(handle);
   }
 
   public get display() {
@@ -36,9 +39,4 @@ export class TimerDialog extends Handle<timerdialog> {
   public setTitle(title: string) {
     TimerDialogSetTitle(this.handle, title);
   }
-
-  public static fromHandle(handle: timerdialog): TimerDialog {
-    return this.getObject(handle);
-  }
-
 }

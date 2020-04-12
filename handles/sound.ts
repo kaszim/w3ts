@@ -3,13 +3,28 @@
 import { Handle } from "./handle";
 
 export class Sound extends Handle<sound> {
-
-  constructor(fileName: string, looping: boolean, is3D: boolean, stopWhenOutOfRange: boolean, fadeInRate: number, fadeOutRate: number, eaxSetting: string) {
+  constructor(
+    fileName: string,
+    looping: boolean,
+    is3D: boolean,
+    stopWhenOutOfRange: boolean,
+    fadeInRate: number,
+    fadeOutRate: number,
+    eaxSetting: string
+  ) {
     if (type(fileName) === "userdata") {
-      super(<sound><unknown>fileName);
+      super((fileName as unknown) as sound);
     } else {
       super(CreateSound(fileName, looping, is3D, stopWhenOutOfRange, fadeInRate, fadeOutRate, eaxSetting));
     }
+  }
+
+  public static fromHandle(handle: sound): Sound {
+    return this.getObject(handle);
+  }
+
+  public static getFileDuration(fileName: string) {
+    return GetSoundFileDuration(fileName);
   }
 
   public get dialogueSpeakerNameKey() {
@@ -123,13 +138,4 @@ export class Sound extends Handle<sound> {
   public unregisterStacked(byPosition: boolean, rectWidth: number, rectHeight: number) {
     UnregisterStackedSound(this.handle, byPosition, rectWidth, rectHeight);
   }
-
-  public static fromHandle(handle: sound): Sound {
-    return this.getObject(handle);
-  }
-
-  public static getFileDuration(fileName: string) {
-    return GetSoundFileDuration(fileName);
-  }
-
 }

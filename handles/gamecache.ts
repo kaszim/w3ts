@@ -4,17 +4,24 @@ import { Handle } from "./handle";
 import { MapPlayer } from "./player";
 
 export class GameCache extends Handle<gamecache> {
-
   public readonly filename: string;
 
   constructor(campaignFile: string) {
     if (type(campaignFile) === "userdata") {
-      super(<gamecache><unknown>campaignFile);
+      super((campaignFile as unknown) as gamecache);
     } else {
       super(InitGameCache(campaignFile));
     }
 
     this.filename = campaignFile;
+  }
+
+  public static fromHandle(handle: gamecache): GameCache {
+    return this.getObject(handle);
+  }
+
+  public static reloadFromDisk() {
+    return ReloadGameCachesFromDisk();
   }
 
   public flush() {
@@ -116,13 +123,4 @@ export class GameCache extends Handle<gamecache> {
   public syncUnit(missionKey: string, key: string) {
     return SyncStoredUnit(this.handle, missionKey, key);
   }
-
-  public static fromHandle(handle: gamecache): GameCache {
-    return this.getObject(handle);
-  }
-
-  public static reloadFromDisk() {
-    return ReloadGameCachesFromDisk();
-  }
-
 }

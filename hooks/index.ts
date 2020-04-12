@@ -38,10 +38,10 @@ export enum W3TS_HOOK {
   MAIN_BEFORE = "main::before",
   MAIN_AFTER = "main::after",
   CONFIG_BEFORE = "config::before",
-  CONFIG_AFTER = "config::after"
+  CONFIG_AFTER = "config::after",
 }
 
-const entryPoints: { [key: string]: scriptHookSignature[]; } = {
+const entryPoints: { [key: string]: scriptHookSignature[] } = {
   [W3TS_HOOK.MAIN_BEFORE]: hooksMainBefore,
   [W3TS_HOOK.MAIN_AFTER]: hooksMainAfter,
   [W3TS_HOOK.CONFIG_BEFORE]: hooksConfigBefore,

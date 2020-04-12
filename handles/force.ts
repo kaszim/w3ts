@@ -4,13 +4,16 @@ import { Handle } from "./handle";
 import { MapPlayer } from "./player";
 
 export class Force extends Handle<force> {
-
   constructor(handle?: force) {
     if (type(handle) === "userdata") {
-      super(<force>handle);
+      super(handle as force);
     } else {
       super(CreateForce());
     }
+  }
+
+  public static fromHandle(handle: force): Force {
+    return this.getObject(handle);
   }
 
   public addPlayer(whichPlayer: MapPlayer) {
@@ -52,9 +55,4 @@ export class Force extends Handle<force> {
   public removePlayer(whichPlayer: MapPlayer) {
     ForceRemovePlayer(this.handle, whichPlayer.handle);
   }
-
-  public static fromHandle(handle: force): Force {
-    return this.getObject(handle);
-  }
-
 }

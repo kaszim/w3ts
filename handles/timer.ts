@@ -3,13 +3,20 @@
 import { Handle } from "./handle";
 
 export class Timer extends Handle<timer> {
-
   constructor(handle?: timer) {
     if (type(handle) === "userdata") {
-      super(<timer>handle);
+      super(handle as timer);
     } else {
       super(CreateTimer());
     }
+  }
+
+  public static fromExpired(): Timer {
+    return this.fromHandle(GetExpiredTimer());
+  }
+
+  public static fromHandle(handle: timer): Timer {
+    return this.getObject(handle);
   }
 
   public get elapsed(): number {
@@ -42,13 +49,5 @@ export class Timer extends Handle<timer> {
   public start(timeout: number, periodic: boolean, handlerFunc: () => void) {
     TimerStart(this.handle, timeout, periodic, handlerFunc);
     return this;
-  }
-
-  public static fromExpired(): Timer {
-    return this.fromHandle(GetExpiredTimer());
-  }
-
-  public static fromHandle(handle: timer): Timer {
-    return this.getObject(handle);
   }
 }

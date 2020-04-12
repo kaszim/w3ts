@@ -3,7 +3,6 @@
 import { Destructable } from "./destructable";
 import { Force } from "./force";
 import { Group } from "./group";
-import { Handle } from "./handle";
 import { Item } from "./item";
 import { MapPlayer } from "./player";
 import { Point } from "./point";
@@ -11,24 +10,51 @@ import { Sound } from "./sound";
 import { Widget } from "./widget";
 
 export class Unit extends Widget {
-
   public readonly handle!: unit;
 
   constructor(owner: MapPlayer | number, unitId: number, x: number, y: number, face: number, skinId?: number) {
     if (type(owner) === "userdata") {
-      super(<unit><unknown>owner);
+      super((owner as unknown) as unit);
     } else {
       const p = typeof owner === "number" ? Player(owner) : owner.handle;
       super(skinId ? BlzCreateUnitWithSkin(p, unitId, x, y, face, skinId) : CreateUnit(p, unitId, x, y, face));
     }
   }
 
-  public set acquireRange(value: number) {
-    SetUnitAcquireRange(this.handle, value);
+  public static foodMadeByType(unitId: number) {
+    return GetFoodMade(unitId);
+  }
+
+  public static foodUsedByType(unitId: number) {
+    return GetFoodUsed(unitId);
+  }
+
+  public static fromEvent() {
+    return this.fromHandle(GetTriggerUnit());
+  }
+
+  public static fromHandle(handle: unit): Unit {
+    return this.getObject(handle);
+  }
+
+  public static getPointValueByType(unitType: number) {
+    return GetUnitPointValueByType(unitType);
+  }
+
+  public static isUnitIdHero(unitId: number) {
+    return IsHeroUnitId(unitId);
+  }
+
+  public static isUnitIdType(unitId: number, whichUnitType: unittype) {
+    return IsUnitIdType(unitId, whichUnitType);
   }
 
   public get acquireRange() {
     return GetUnitPropWindow(this.handle);
+  }
+
+  public set acquireRange(value: number) {
+    SetUnitAcquireRange(this.handle, value);
   }
 
   public get agility() {
@@ -47,12 +73,12 @@ export class Unit extends Widget {
     BlzSetUnitArmor(this.handle, armorAmount);
   }
 
-  public set canSleep(flag: boolean) {
-    UnitAddSleep(this.handle, flag);
-  }
-
   public get canSleep() {
     return UnitCanSleep(this.handle);
+  }
+
+  public set canSleep(flag: boolean) {
+    UnitAddSleep(this.handle, flag);
   }
 
   public get collisionSize() {
@@ -95,12 +121,12 @@ export class Unit extends Widget {
     SetHeroXP(this.handle, newXpVal, true);
   }
 
-  public set facing(value: number) {
-    SetUnitFacing(this.handle, value);
-  }
-
   public get facing() {
     return GetUnitFacing(this.handle);
+  }
+
+  public set facing(value: number) {
+    SetUnitFacing(this.handle, value);
   }
 
   public get foodMade() {
@@ -127,12 +153,12 @@ export class Unit extends Widget {
     return UnitInventorySize(this.handle);
   }
 
-  public set invulnerable(flag: boolean) {
-    SetUnitInvulnerable(this.handle, flag);
-  }
-
   public get invulnerable() {
     return BlzIsUnitInvulnerable(this.handle);
+  }
+
+  public set invulnerable(flag: boolean) {
+    SetUnitInvulnerable(this.handle, flag);
   }
 
   public get level() {
@@ -167,12 +193,12 @@ export class Unit extends Widget {
     BlzSetUnitMaxMana(this.handle, value);
   }
 
-  public set moveSpeed(value: number) {
-    SetUnitMoveSpeed(this.handle, value);
-  }
-
   public get moveSpeed() {
     return GetUnitMoveSpeed(this.handle);
+  }
+
+  public set moveSpeed(value: number) {
+    SetUnitMoveSpeed(this.handle, value);
   }
 
   get name() {
@@ -183,28 +209,28 @@ export class Unit extends Widget {
     BlzSetUnitName(this.handle, value);
   }
 
-  public set nameProper(value: string) {
-    BlzSetHeroProperName(this.handle, value);
-  }
-
   public get nameProper() {
     return GetHeroProperName(this.handle);
   }
 
-  public set owner(whichPlayer: MapPlayer) {
-    SetUnitOwner(this.handle, whichPlayer.handle, true);
+  public set nameProper(value: string) {
+    BlzSetHeroProperName(this.handle, value);
   }
 
   public get owner() {
     return MapPlayer.fromHandle(GetOwningPlayer(this.handle));
   }
 
-  public set paused(flag: boolean) {
-    PauseUnit(this.handle, flag);
+  public set owner(whichPlayer: MapPlayer) {
+    SetUnitOwner(this.handle, whichPlayer.handle, true);
   }
 
   public get paused() {
     return IsUnitPaused(this.handle);
+  }
+
+  public set paused(flag: boolean) {
+    PauseUnit(this.handle, flag);
   }
 
   public get point() {
@@ -219,12 +245,12 @@ export class Unit extends Widget {
     return GetUnitPointValue(this.handle);
   }
 
-  public set propWindow(value: number) {
-    SetUnitPropWindow(this.handle, value);
-  }
-
   public get propWindow() {
     return GetUnitAcquireRange(this.handle);
+  }
+
+  public set propWindow(value: number) {
+    SetUnitPropWindow(this.handle, value);
   }
 
   public get race() {
@@ -243,20 +269,16 @@ export class Unit extends Widget {
     return Unit.fromHandle(GetUnitRallyUnit(this.handle));
   }
 
-  public set resourceAmount(amount: number) {
-    SetResourceAmount(this.handle, amount);
-  }
-
   public get resourceAmount() {
     return GetResourceAmount(this.handle);
   }
 
-  public get selectable() {
-    return BlzIsUnitSelectable(this.handle);
+  public set resourceAmount(amount: number) {
+    SetResourceAmount(this.handle, amount);
   }
 
-  public set selectionScale(scale: number) {
-    this.setField(UNIT_RF_SELECTION_SCALE, scale);
+  public get selectable() {
+    return BlzIsUnitSelectable(this.handle);
   }
 
   public get selectionScale() {
@@ -264,20 +286,16 @@ export class Unit extends Widget {
     return typeof result === "number" ? result : 0;
   }
 
-  public set show(flag: boolean) {
-    ShowUnit(this.handle, flag);
+  public set selectionScale(scale: number) {
+    this.setField(UNIT_RF_SELECTION_SCALE, scale);
   }
 
   public get show() {
     return IsUnitHidden(this.handle);
   }
 
-  public get skin() {
-    return BlzGetUnitSkin(this.handle);
-  }
-
-  public set skin(skinId: number) {
-    BlzSetUnitSkin(this.handle, skinId);
+  public set show(flag: boolean) {
+    ShowUnit(this.handle, flag);
   }
 
   public get skillPoints() {
@@ -286,6 +304,14 @@ export class Unit extends Widget {
 
   public set skillPoints(skillPointDelta: number) {
     UnitModifySkillPoints(this.handle, skillPointDelta);
+  }
+
+  public get skin() {
+    return BlzGetUnitSkin(this.handle);
+  }
+
+  public set skin(skinId: number) {
+    BlzSetUnitSkin(this.handle, skinId);
   }
 
   public get sleeping() {
@@ -300,12 +326,12 @@ export class Unit extends Widget {
     SetHeroStr(this.handle, value, true);
   }
 
-  public set turnSpeed(value: number) {
-    SetUnitTurnSpeed(this.handle, value);
-  }
-
   public get turnSpeed() {
     return GetUnitTurnSpeed(this.handle);
+  }
+
+  public set turnSpeed(value: number) {
+    SetUnitTurnSpeed(this.handle, value);
   }
 
   public get typeId() {
@@ -320,12 +346,12 @@ export class Unit extends Widget {
     SetUnitUserData(this.handle, value);
   }
 
-  public set waygateActive(flag: boolean) {
-    WaygateActivate(this.handle, flag);
-  }
-
   public get waygateActive() {
     return WaygateIsActive(this.handle);
+  }
+
+  public set waygateActive(flag: boolean) {
+    WaygateActivate(this.handle, flag);
   }
 
   public get x() {
@@ -360,7 +386,7 @@ export class Unit extends Widget {
     AddHeroXP(this.handle, xpToAdd, showEyeCandy);
   }
 
-  public addIndicator(red: number, blue: number, green: number, alpha: number, ) {
+  public addIndicator(red: number, blue: number, green: number, alpha: number) {
     UnitAddIndicator(this.handle, red, blue, green, alpha);
   }
 
@@ -412,15 +438,55 @@ export class Unit extends Widget {
     return UnitCanSleepPerm(this.handle);
   }
 
-  public countBuffs(removePositive: boolean, removeNegative: boolean, magic: boolean, physical: boolean, timedLife: boolean, aura: boolean, autoDispel: boolean) {
+  public countBuffs(
+    removePositive: boolean,
+    removeNegative: boolean,
+    magic: boolean,
+    physical: boolean,
+    timedLife: boolean,
+    aura: boolean,
+    autoDispel: boolean
+  ) {
     return UnitCountBuffsEx(this.handle, removePositive, removeNegative, magic, physical, timedLife, aura, autoDispel);
   }
 
-  public damageAt(delay: number, radius: number, x: number, y: number, amount: number, attack: boolean, ranged: boolean, attackType: attacktype, damageType: damagetype, weaponType: weapontype) {
-    return UnitDamagePoint(this.handle, delay, radius, x, y, amount, attack, ranged, attackType, damageType, weaponType);
+  public damageAt(
+    delay: number,
+    radius: number,
+    x: number,
+    y: number,
+    amount: number,
+    attack: boolean,
+    ranged: boolean,
+    attackType: attacktype,
+    damageType: damagetype,
+    weaponType: weapontype
+  ) {
+    return UnitDamagePoint(
+      this.handle,
+      delay,
+      radius,
+      x,
+      y,
+      amount,
+      attack,
+      ranged,
+      attackType,
+      damageType,
+      weaponType
+    );
   }
 
-  public damageTarget(target: widget, amount: number, radius: number, attack: boolean, ranged: boolean, attackType: attacktype, damageType: damagetype, weaponType: weapontype) {
+  public damageTarget(
+    target: widget,
+    amount: number,
+    radius: number,
+    attack: boolean,
+    ranged: boolean,
+    attackType: attacktype,
+    damageType: damagetype,
+    weaponType: weapontype
+  ) {
     return UnitDamageTarget(this.handle, target, amount, attack, ranged, attackType, damageType, weaponType);
   }
 
@@ -444,7 +510,7 @@ export class Unit extends Widget {
     return UnitDropItemSlot(this.handle, whichItem.handle, slot);
   }
 
-  public dropItemTarget(whichItem: Item, target: Widget/* | Unit | Item | Destructable*/) {
+  public dropItemTarget(whichItem: Item, target: Widget /* | Unit | Item | Destructable*/) {
     return UnitDropItemTarget(this.handle, whichItem.handle, target.handle);
   }
 
@@ -549,7 +615,15 @@ export class Unit extends Widget {
     return GetHeroStr(this.handle, includeBonuses);
   }
 
-  public hasBuffs(removePositive: boolean, removeNegative: boolean, magic: boolean, physical: boolean, timedLife: boolean, aura: boolean, autoDispel: boolean) {
+  public hasBuffs(
+    removePositive: boolean,
+    removeNegative: boolean,
+    magic: boolean,
+    physical: boolean,
+    timedLife: boolean,
+    aura: boolean,
+    autoDispel: boolean
+  ) {
     return UnitHasBuffsEx(this.handle, removePositive, removeNegative, magic, physical, timedLife, aura, autoDispel);
   }
 
@@ -634,31 +708,45 @@ export class Unit extends Widget {
   }
 
   public issueBuildOrder(unit: string | number, x: number, y: number) {
-    return typeof unit === "string" ? IssueBuildOrder(this.handle, unit, x, y) : IssueBuildOrderById(this.handle, unit, x, y);
+    return typeof unit === "string"
+      ? IssueBuildOrder(this.handle, unit, x, y)
+      : IssueBuildOrderById(this.handle, unit, x, y);
   }
 
   public issueImmediateOrder(order: string | number) {
-    return typeof order === "string" ? IssueImmediateOrder(this.handle, order) : IssueImmediateOrderById(this.handle, order);
+    return typeof order === "string"
+      ? IssueImmediateOrder(this.handle, order)
+      : IssueImmediateOrderById(this.handle, order);
   }
 
   public issueInstantOrderAt(order: string | number, x: number, y: number, instantTargetWidget: Widget) {
-    return typeof order === "string" ? IssueInstantPointOrder(this.handle, order, x, y, instantTargetWidget.handle) : IssueInstantPointOrderById(this.handle, order, x, y, instantTargetWidget.handle);
+    return typeof order === "string"
+      ? IssueInstantPointOrder(this.handle, order, x, y, instantTargetWidget.handle)
+      : IssueInstantPointOrderById(this.handle, order, x, y, instantTargetWidget.handle);
   }
 
   public issueInstantTargetOrder(order: string | number, targetWidget: Widget, instantTargetWidget: Widget) {
-    return typeof order === "string" ? IssueInstantTargetOrder(this.handle, order, targetWidget.handle, instantTargetWidget.handle) : IssueInstantTargetOrderById(this.handle, order, targetWidget.handle, instantTargetWidget.handle);
+    return typeof order === "string"
+      ? IssueInstantTargetOrder(this.handle, order, targetWidget.handle, instantTargetWidget.handle)
+      : IssueInstantTargetOrderById(this.handle, order, targetWidget.handle, instantTargetWidget.handle);
   }
 
   public issueOrderAt(order: string | number, x: number, y: number) {
-    return typeof order === "string" ? IssuePointOrder(this.handle, order, x, y) : IssuePointOrderById(this.handle, order, x, y);
+    return typeof order === "string"
+      ? IssuePointOrder(this.handle, order, x, y)
+      : IssuePointOrderById(this.handle, order, x, y);
   }
 
   public issuePointOrder(order: string | number, whichPoint: Point) {
-    return typeof order === "string" ? IssuePointOrderLoc(this.handle, order, whichPoint.handle) : IssuePointOrderByIdLoc(this.handle, order, whichPoint.handle);
+    return typeof order === "string"
+      ? IssuePointOrderLoc(this.handle, order, whichPoint.handle)
+      : IssuePointOrderByIdLoc(this.handle, order, whichPoint.handle);
   }
 
   public issueTargetOrder(order: string | number, targetWidget: Widget) {
-    return typeof order === "string" ? IssueTargetOrder(this.handle, order, targetWidget.handle) : IssueTargetOrderById(this.handle, order, targetWidget.handle);
+    return typeof order === "string"
+      ? IssueTargetOrder(this.handle, order, targetWidget.handle)
+      : IssueTargetOrderById(this.handle, order, targetWidget.handle);
   }
 
   public isUnit(whichSpecifiedUnit: unit) {
@@ -713,7 +801,15 @@ export class Unit extends Widget {
     UnitRemoveBuffs(this.handle, removePositive, removeNegative);
   }
 
-  public removeBuffsEx(removePositive: boolean, removeNegative: boolean, magic: boolean, physical: boolean, timedLife: boolean, aura: boolean, autoDispel: boolean) {
+  public removeBuffsEx(
+    removePositive: boolean,
+    removeNegative: boolean,
+    magic: boolean,
+    physical: boolean,
+    timedLife: boolean,
+    aura: boolean,
+    autoDispel: boolean
+  ) {
     UnitRemoveBuffsEx(this.handle, removePositive, removeNegative, magic, physical, timedLife, aura, autoDispel);
   }
 
@@ -833,7 +929,10 @@ export class Unit extends Widget {
     BlzSetUnitFacingEx(this.handle, facingAngle);
   }
 
-  public setField(field: unitbooleanfield | unitintegerfield | unitrealfield | unitstringfield, value: boolean | number | string) {
+  public setField(
+    field: unitbooleanfield | unitintegerfield | unitrealfield | unitstringfield,
+    value: boolean | number | string
+  ) {
     const fieldType = field.toString().substr(0, field.toString().indexOf(":"));
 
     if (fieldType === "unitbooleanfield" && typeof value === "boolean") {
@@ -975,33 +1074,5 @@ export class Unit extends Widget {
 
   public waygateSetDestination(x: number, y: number) {
     WaygateSetDestination(this.handle, x, y);
-  }
-
-  public static foodMadeByType(unitId: number) {
-    return GetFoodMade(unitId);
-  }
-
-  public static foodUsedByType(unitId: number) {
-    return GetFoodUsed(unitId);
-  }
-
-  public static fromEvent() {
-    return this.fromHandle(GetTriggerUnit());
-  }
-
-  public static fromHandle(handle: unit): Unit {
-    return this.getObject(handle);
-  }
-
-  public static getPointValueByType(unitType: number) {
-    return GetUnitPointValueByType(unitType);
-  }
-
-  public static isUnitIdHero(unitId: number) {
-    return IsHeroUnitId(unitId);
-  }
-
-  public static isUnitIdType(unitId: number, whichUnitType: unittype) {
-    return IsUnitIdType(unitId, whichUnitType);
   }
 }

@@ -1,26 +1,32 @@
 /** @noSelfInFile **/
 
-import { Handle } from "./handle";
 import { Widget } from "./widget";
 
 export class Destructable extends Widget {
-
   public readonly handle!: destructable;
 
   constructor(objectId: number, x: number, y: number, z: number, face: number, scale: number, varation: number) {
     if (type(objectId) === "userdata") {
-      super(<destructable><unknown>objectId);
+      super((objectId as unknown) as destructable);
     } else {
       super(CreateDestructableZ(objectId, x, y, z, face, scale, varation));
     }
   }
 
-  public set invulnerable(flag: boolean) {
-    SetDestructableInvulnerable(this.handle, flag);
+  public static fromEvent() {
+    return this.fromHandle(GetTriggerDestructable());
+  }
+
+  public static fromHandle(handle: destructable): Destructable {
+    return this.getObject(handle);
   }
 
   public get invulnerable() {
     return IsDestructableInvulnerable(this.handle);
+  }
+
+  public set invulnerable(flag: boolean) {
+    SetDestructableInvulnerable(this.handle, flag);
   }
 
   public get life() {
@@ -90,13 +96,4 @@ export class Destructable extends Widget {
   public show(flag: boolean) {
     ShowDestructable(this.handle, flag);
   }
-
-  public static fromEvent() {
-    return this.fromHandle(GetTriggerDestructable());
-  }
-
-  public static fromHandle(handle: destructable): Destructable {
-    return this.getObject(handle);
-  }
-
 }

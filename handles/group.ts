@@ -8,13 +8,32 @@ import { Unit } from "./unit";
 import { Widget } from "./widget";
 
 export class Group extends Handle<group> {
-
   constructor(handle?: group) {
     if (type(handle) === "userdata") {
-      super(<group>handle);
+      super(handle as group);
     } else {
       super(CreateGroup());
     }
+  }
+
+  public static fromHandle(handle: group): Group {
+    return this.getObject(handle);
+  }
+
+  public static getEnumUnit(): Unit {
+    return Unit.fromHandle(GetEnumUnit());
+  }
+
+  public static getFilterUnit(): Unit {
+    return Unit.fromHandle(GetFilterUnit());
+  }
+
+  public get first() {
+    return FirstOfGroup(this.handle);
+  }
+
+  public get size(): number {
+    return BlzGroupGetSize(this.handle);
   }
 
   public addGroupFast(addGroup: Group): number {
@@ -77,14 +96,6 @@ export class Group extends Handle<group> {
     ForGroup(this.handle, callback);
   }
 
-  public get first() {
-    return FirstOfGroup(this.handle);
-  }
-
-  public get size(): number {
-    return BlzGroupGetSize(this.handle);
-  }
-
   public getUnitAt(index: number): Unit {
     return Unit.fromHandle(BlzGroupUnitAt(this.handle, index));
   }
@@ -131,17 +142,5 @@ export class Group extends Handle<group> {
 
   public removeUnit(whichUnit: Unit): boolean {
     return GroupRemoveUnit(this.handle, whichUnit.handle);
-  }
-
-  public static fromHandle(handle: group): Group {
-    return this.getObject(handle);
-  }
-
-  public static getEnumUnit(): Unit {
-    return Unit.fromHandle(GetEnumUnit());
-  }
-
-  public static getFilterUnit(): Unit {
-    return Unit.fromHandle(GetFilterUnit());
   }
 }
