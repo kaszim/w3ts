@@ -4,12 +4,8 @@ import { Handle } from "./handle";
 import { Timer } from "./timer";
 
 export class TimerDialog extends Handle<timerdialog> {
-  constructor(t: Timer) {
-    if (type(t) === "userdata") {
-      super((t as unknown) as timerdialog);
-    } else {
-      super(CreateTimerDialog(t.handle));
-    }
+  public static create(t: Timer) {
+    return new this(CreateTimerDialog(t.handle));
   }
 
   public static fromHandle(handle: timerdialog): TimerDialog {

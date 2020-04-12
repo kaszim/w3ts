@@ -10,7 +10,7 @@ export enum ImageType {
 }
 
 export class Image extends Handle<image> {
-  constructor(
+  public static create(
     file: string,
     sizeX: number,
     sizeY: number,
@@ -23,11 +23,7 @@ export class Image extends Handle<image> {
     originZ: number,
     imageType: ImageType
   ) {
-    if (type(file) === "userdata") {
-      super((file as unknown) as image);
-    } else {
-      super(CreateImage(file, sizeX, sizeY, sizeZ, posX, posY, posZ, originX, originY, originZ, imageType));
-    }
+    return new this(CreateImage(file, sizeX, sizeY, sizeZ, posX, posY, posZ, originX, originY, originZ, imageType));
   }
 
   public static fromHandle(handle: image): Image {

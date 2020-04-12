@@ -5,14 +5,6 @@ import { Handle } from "./handle";
 import { Point } from "./point";
 
 export class MapPlayer extends Handle<player> {
-  private constructor(index: number) {
-    if (type(index) === "userdata") {
-      super((index as unknown) as player);
-    } else {
-      super(Player(index));
-    }
-  }
-
   public static fromEnum() {
     return MapPlayer.fromHandle(GetEnumPlayer());
   }

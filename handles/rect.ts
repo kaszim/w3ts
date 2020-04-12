@@ -4,12 +4,8 @@ import { Handle } from "./handle";
 import { Point } from "./point";
 
 export class Rectangle extends Handle<rect> {
-  constructor(minX: number, minY: number, maxX: number, maxY: number) {
-    if (type(minX) === "userdata") {
-      super((minX as unknown) as rect);
-    } else {
-      super(Rect(minX, minY, maxX, maxY));
-    }
+  public static create(minX: number, minY: number, maxX: number, maxY: number) {
+    return new this(Rect(minX, minY, maxX, maxY));
   }
 
   public static fromHandle(handle: rect): Rectangle {

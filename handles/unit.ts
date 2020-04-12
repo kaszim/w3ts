@@ -12,13 +12,12 @@ import { Widget } from "./widget";
 export class Unit extends Widget {
   public readonly handle!: unit;
 
-  constructor(owner: MapPlayer | number, unitId: number, x: number, y: number, face: number, skinId?: number) {
-    if (type(owner) === "userdata") {
-      super((owner as unknown) as unit);
-    } else {
-      const p = typeof owner === "number" ? Player(owner) : owner.handle;
-      super(skinId ? BlzCreateUnitWithSkin(p, unitId, x, y, face, skinId) : CreateUnit(p, unitId, x, y, face));
-    }
+  public static create(owner: MapPlayer, unitId: number, x: number, y: number, face: number, skinId?: number) {
+    return new this(
+      skinId
+        ? BlzCreateUnitWithSkin(owner.handle, unitId, x, y, face, skinId)
+        : CreateUnit(owner.handle, unitId, x, y, face)
+    );
   }
 
   public static foodMadeByType(unitId: number) {

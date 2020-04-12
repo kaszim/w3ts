@@ -4,13 +4,17 @@ import { Handle } from "./handle";
 import { MapPlayer } from "./player";
 
 export class DialogButton extends Handle<button> {
-  constructor(whichDialog: Dialog, text: string, hotkey: number = 0, quit: boolean = false, score: boolean = false) {
-    if (type(whichDialog) === "userdata") {
-      super((whichDialog as unknown) as button);
-    } else if (!quit) {
-      super(DialogAddButton(whichDialog.handle, text, hotkey));
+  public static addToDialog(
+    whichDialog: Dialog,
+    text: string,
+    hotkey: number = 0,
+    quit: boolean = false,
+    score: boolean = false
+  ) {
+    if (!quit) {
+      return new this(DialogAddButton(whichDialog.handle, text, hotkey));
     } else {
-      super(DialogAddQuitButton(whichDialog.handle, score, text, hotkey));
+      return new this(DialogAddQuitButton(whichDialog.handle, score, text, hotkey));
     }
   }
 
@@ -33,7 +37,7 @@ export class Dialog extends Handle<dialog> {
   }
 
   public addButton(text: string, hotkey: number = 0, quit: boolean = false, score: boolean = false) {
-    return new DialogButton(this, text, hotkey, quit, score);
+    return DialogButton.addToDialog(this, text, hotkey, quit, score);
   }
 
   public clear() {

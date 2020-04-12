@@ -3,7 +3,7 @@
 import { Handle } from "./handle";
 
 export class Ubersplat extends Handle<ubersplat> {
-  constructor(
+  public static create(
     x: number,
     y: number,
     name: string,
@@ -14,11 +14,7 @@ export class Ubersplat extends Handle<ubersplat> {
     forcePaused: boolean,
     noBirthTime: boolean
   ) {
-    if (type(x) === "userdata") {
-      super((x as unknown) as ubersplat);
-    } else {
-      super(CreateUbersplat(x, y, name, red, green, blue, alpha, forcePaused, noBirthTime));
-    }
+    return new this(CreateUbersplat(x, y, name, red, green, blue, alpha, forcePaused, noBirthTime));
   }
 
   public static fromHandle(handle: ubersplat): Ubersplat {

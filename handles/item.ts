@@ -7,12 +7,8 @@ import { Widget } from "./widget";
 export class Item extends Widget {
   public readonly handle!: item;
 
-  constructor(itemId: number, x: number, y: number, skinId?: number) {
-    if (type(itemId) === "userdata") {
-      super((itemId as unknown) as item);
-    } else {
-      super(skinId ? BlzCreateItemWithSkin(itemId, x, y, skinId) : CreateItem(itemId, x, y));
-    }
+  public static create(itemId: number, x: number, y: number, skinId?: number) {
+    return new this(skinId ? BlzCreateItemWithSkin(itemId, x, y, skinId) : CreateItem(itemId, x, y));
   }
 
   public static fromHandle(handle: item): Item {

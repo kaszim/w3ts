@@ -3,12 +3,8 @@
 import { Handle } from "./handle";
 
 export class QuestItem extends Handle<questitem> {
-  constructor(whichQuest: Quest) {
-    if (type(whichQuest) === "userdata") {
-      super((whichQuest as unknown) as questitem);
-    } else {
-      super(QuestCreateItem(whichQuest.handle));
-    }
+  public static addToQuest(whichQuest: Quest) {
+    return new this(QuestCreateItem(whichQuest.handle));
   }
 
   public get completed() {
@@ -86,7 +82,7 @@ export class Quest extends Handle<quest> {
   }
 
   public addItem(description: string) {
-    const questItem = new QuestItem(this);
+    const questItem = QuestItem.addToQuest(this);
 
     questItem.setDescription(description);
 

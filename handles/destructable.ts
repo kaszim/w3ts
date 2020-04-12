@@ -5,11 +5,29 @@ import { Widget } from "./widget";
 export class Destructable extends Widget {
   public readonly handle!: destructable;
 
-  constructor(objectId: number, x: number, y: number, z: number, face: number, scale: number, varation: number) {
-    if (type(objectId) === "userdata") {
-      super((objectId as unknown) as destructable);
+  public static create(
+    objectId: number,
+    x: number,
+    y: number,
+    face: number,
+    scale: number,
+    variation: number
+  ): Destructable;
+  public static create(
+    objectId: number,
+    x: number,
+    y: number,
+    z: number,
+    face: number,
+    scale: number,
+    // tslint:disable-next-line: unified-signatures
+    variation: number
+  ): Destructable;
+  public static create(...args: number[]): Destructable {
+    if (args.length === 7) {
+      return new this(CreateDestructableZ(args[0], args[1], args[2], args[3], args[4], args[5], args[6]));
     } else {
-      super(CreateDestructableZ(objectId, x, y, z, face, scale, varation));
+      return new this(CreateDestructable(args[0], args[1], args[2], args[3], args[4], args[5]));
     }
   }
 

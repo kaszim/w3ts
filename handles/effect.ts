@@ -6,20 +6,16 @@ import { Point } from "./point";
 import { Widget } from "./widget";
 
 export class Effect extends Handle<effect> {
-  constructor(modelName: string, x: number, y: number);
-  constructor(modelName: string, targetWidget: Widget, attachPointName: string);
-  constructor(modelName: string, a: number | Widget, b: number | string) {
-    if (type(modelName) === "userdata") {
-      super((modelName as unknown) as effect);
-    } else if (typeof a === "number" && typeof b === "number") {
-      super(AddSpecialEffect(modelName, a, b));
-    } else if (typeof a !== "number" && typeof b === "string") {
-      super(AddSpecialEffectTarget(modelName, a.handle, b));
-    }
-  }
 
   public static fromHandle(handle: effect): Effect {
     return this.getObject(handle);
+  }
+  public static onPoint(modelName: string, x: number, y: number) {
+    return new this(AddSpecialEffect(modelName, x, y));
+  }
+
+  public static onWidget(modelName: string, targetWidget: Widget, attachPointName: string) {
+    return new this(AddSpecialEffectTarget(modelName, targetWidget.handle, attachPointName));
   }
 
   public get scale() {

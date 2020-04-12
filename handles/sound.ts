@@ -3,7 +3,7 @@
 import { Handle } from "./handle";
 
 export class Sound extends Handle<sound> {
-  constructor(
+  public static create(
     fileName: string,
     looping: boolean,
     is3D: boolean,
@@ -12,11 +12,7 @@ export class Sound extends Handle<sound> {
     fadeOutRate: number,
     eaxSetting: string
   ) {
-    if (type(fileName) === "userdata") {
-      super((fileName as unknown) as sound);
-    } else {
-      super(CreateSound(fileName, looping, is3D, stopWhenOutOfRange, fadeInRate, fadeOutRate, eaxSetting));
-    }
+    return new this(CreateSound(fileName, looping, is3D, stopWhenOutOfRange, fadeInRate, fadeOutRate, eaxSetting));
   }
 
   public static fromHandle(handle: sound): Sound {

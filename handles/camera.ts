@@ -208,12 +208,8 @@ export class Camera {
 }
 
 export class CameraSetup extends Handle<camerasetup> {
-  constructor(handle?: camerasetup) {
-    if (type(handle) === "userdata") {
-      super(handle as camerasetup);
-    } else {
-      super(CreateCameraSetup());
-    }
+  public static create() {
+    return new this(CreateCameraSetup());
   }
 
   public static fromHandle(handle: camerasetup): camerasetup {

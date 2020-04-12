@@ -8,12 +8,8 @@ import { Unit } from "./unit";
 import { Widget } from "./widget";
 
 export class Group extends Handle<group> {
-  constructor(handle?: group) {
-    if (type(handle) === "userdata") {
-      super(handle as group);
-    } else {
-      super(CreateGroup());
-    }
+  public static create() {
+    return new this(CreateGroup());
   }
 
   public static fromHandle(handle: group): Group {

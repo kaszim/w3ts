@@ -8,12 +8,8 @@ import { Unit } from "./unit";
 import { Widget } from "./widget";
 
 export class Trigger extends Handle<trigger> {
-  constructor(handle?: trigger) {
-    if (type(handle) === "userdata") {
-      super(handle as trigger);
-    } else {
-      super(CreateTrigger());
-    }
+  public static create() {
+    return new this(CreateTrigger());
   }
 
   public static fromEvent() {

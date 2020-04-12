@@ -83,7 +83,7 @@ export class SyncRequest {
   private static readonly cache: SyncRequest[] = [];
   private static counter = 0;
   private static defaultOptions: ISyncOptions = { timeout: 0 };
-  private static eventTrigger = new Trigger();
+  private static eventTrigger = Trigger.create();
   private static index = 0;
   private static indicies: number[] = [];
   private static initialized = false;
@@ -131,7 +131,7 @@ export class SyncRequest {
 
     // handle timeout
     if (this.options.timeout > 0) {
-      new Timer().start(this.options.timeout, false, () => {
+      Timer.create().start(this.options.timeout, false, () => {
         Timer.fromExpired().destroy();
         if (this.onError && this.status === SyncStatus.Syncing) {
           this.onError({ data: "Timeout", status: SyncStatus.Timeout, time: this.startTime }, this);

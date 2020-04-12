@@ -6,12 +6,8 @@ import { Rectangle } from "./rect";
 import { Unit } from "./unit";
 
 export class Region extends Handle<region> {
-  constructor(handle?: region) {
-    if (type(handle) === "userdata") {
-      super(handle as region);
-    } else {
-      super(CreateRegion());
-    }
+  public static create() {
+    return new this(CreateRegion());
   }
 
   public static fromHandle(handle: region): Region {

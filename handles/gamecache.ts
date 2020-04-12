@@ -4,24 +4,23 @@ import { Handle } from "./handle";
 import { MapPlayer } from "./player";
 
 export class GameCache extends Handle<gamecache> {
-  public readonly filename: string;
-
-  constructor(campaignFile: string) {
-    if (type(campaignFile) === "userdata") {
-      super((campaignFile as unknown) as gamecache);
-    } else {
-      super(InitGameCache(campaignFile));
-    }
-
-    this.filename = campaignFile;
-  }
+  private _filename: string = "unknown";
 
   public static fromHandle(handle: gamecache): GameCache {
     return this.getObject(handle);
   }
 
+  public static init(campaignFile: string) {
+    const gameCache = new this(InitGameCache(campaignFile));
+    gameCache._filename = campaignFile
+  }
+
   public static reloadFromDisk() {
     return ReloadGameCachesFromDisk();
+  }
+
+  public get filename() {
+    return this._filename;
   }
 
   public flush() {

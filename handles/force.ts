@@ -4,12 +4,8 @@ import { Handle } from "./handle";
 import { MapPlayer } from "./player";
 
 export class Force extends Handle<force> {
-  constructor(handle?: force) {
-    if (type(handle) === "userdata") {
-      super(handle as force);
-    } else {
-      super(CreateForce());
-    }
+  public static create() {
+    return new this(CreateForce());
   }
 
   public static fromHandle(handle: force): Force {

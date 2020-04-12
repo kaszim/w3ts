@@ -3,12 +3,8 @@
 import { Handle } from "./handle";
 
 export class Point extends Handle<location> {
-  constructor(x: number, y: number) {
-    if (type(x) === "userdata") {
-      super((handle as unknown) as location);
-    } else {
-      super(Location(x, y));
-    }
+  public static create(x: number, y: number) {
+    return new this(Location(x, y));
   }
 
   public static fromHandle(handle: location): Point {

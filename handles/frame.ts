@@ -3,15 +3,12 @@
 import { Handle } from "./handle";
 
 export class Frame extends Handle<framehandle> {
-  constructor(name: string, owner: Frame, priority: number, createContext: number) {
-    if (type(name) === "userdata") {
-      super((name as unknown) as framehandle);
-    } else {
-      super(BlzCreateFrame(name, owner.handle, priority, createContext));
-    }
-  }
+
   public static autoPosition(enable: boolean) {
     BlzEnableUIAutoPosition(enable);
+  }
+  public static create(name: string, owner: Frame, priority: number, createContext: number) {
+    return new this(BlzCreateFrame(name, owner.handle, priority, createContext));
   }
 
   public static fromEvent() {

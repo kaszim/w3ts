@@ -3,12 +3,8 @@
 import { Handle } from "./handle";
 
 export class Timer extends Handle<timer> {
-  constructor(handle?: timer) {
-    if (type(handle) === "userdata") {
-      super(handle as timer);
-    } else {
-      super(CreateTimer());
-    }
+  public static create() {
+    return new this(CreateTimer());
   }
 
   public static fromExpired(): Timer {

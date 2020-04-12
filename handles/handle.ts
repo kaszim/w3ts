@@ -3,7 +3,6 @@
 const map: WeakMap<handle, any> = new WeakMap<handle, any>();
 
 export class Handle<T extends handle> {
-
   public readonly handle: T;
 
   protected constructor(handle: T) {
@@ -23,5 +22,4 @@ export class Handle<T extends handle> {
   public get id() {
     return GetHandleId(this.handle);
   }
-
 }

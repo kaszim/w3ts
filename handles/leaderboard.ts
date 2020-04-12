@@ -4,12 +4,8 @@ import { Handle } from "./handle";
 import { MapPlayer } from "./player";
 
 export class Leaderboard extends Handle<leaderboard> {
-  constructor(handle?: leaderboard) {
-    if (type(handle) === "userdata") {
-      super(handle as leaderboard);
-    } else {
-      super(CreateLeaderboard());
-    }
+  public static create() {
+    return new this(CreateLeaderboard());
   }
 
   public static fromHandle(handle: leaderboard): Leaderboard {
