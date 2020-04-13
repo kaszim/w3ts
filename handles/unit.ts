@@ -6,9 +6,16 @@ import { MapPlayer } from "./player";
 import { Point } from "./point";
 import { Sound } from "./sound";
 import { Widget } from "./widget";
+import { Trigger } from "./trigger";
+import { EventDispatcher } from "../common/index";
+import { Ability } from "./ability";
+
+type OnUnitCastHandler = (caster: Unit, abilityId: number, ability: Ability, target: Unit) => void;
 
 export class Unit extends Widget {
   public readonly handle!: unit;
+  private onCastTrigger: Trigger | null = null;
+  private onUnitCastEvent = new EventDispatcher<[Unit, number, Ability, Unit], void>();
 
   public static create(owner: MapPlayer, unitId: number, x: number, y: number, face: number, skinId?: number) {
     return new this(this.createUnitHandle(owner, unitId, x, y, face, skinId));
@@ -526,11 +533,11 @@ export class Unit extends Widget {
   }
 
   public getAbility(abilId: number) {
-    return BlzGetUnitAbility(this.handle, abilId);
+    return Ability.fromHandle(BlzGetUnitAbility(this.handle, abilId));
   }
 
   public getAbilityByIndex(index: number) {
-    return BlzGetUnitAbilityByIndex(this.handle, index);
+    return Ability.fromHandle(BlzGetUnitAbilityByIndex(this.handle, index));
   }
 
   public getAbilityCooldown(abilId: number, level: number) {
@@ -782,6 +789,23 @@ export class Unit extends Widget {
 
   public modifySkillPoints(skillPointDelta: number) {
     return UnitModifySkillPoints(this.handle, skillPointDelta);
+  }
+
+  public onUnitCast(handler: OnUnitCastHandler) {
+    if (this.onCastTrigger === null) {
+      this.onCastTrigger = Trigger.create();
+      this.onCastTrigger.registerUnitEvent(this, EVENT_UNIT_SPELL_CAST);
+    }
+    if (this.onUnitCastEvent.isEmpty) {
+      this.onCastTrigger.addAction(() => {
+        const caster = Unit.fromHandle(GetSpellAbilityUnit());
+        const abilityId = GetSpellAbilityId();
+        const ability = Ability.fromHandle(GetSpellAbility());
+        const target = Unit.fromHandle(GetSpellTargetUnit());
+        this.onUnitCastEvent.dispatch(caster, abilityId, ability, target);
+      });
+    }
+    this.onUnitCastEvent.register(handler);
   }
 
   public pauseEx(flag: boolean) {
