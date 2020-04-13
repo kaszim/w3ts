@@ -1,6 +1,7 @@
 import { MapPlayer } from "./player";
 import { Point } from "./point";
 import { Widget } from "./widget";
+import { Ability } from "./ability";
 
 export class Item extends Widget {
   public readonly handle!: item;
@@ -118,6 +119,14 @@ export class Item extends Widget {
     RemoveItem(this.handle);
   }
 
+  public getAbility(abilCode: number) {
+    return Ability.fromHandle(BlzGetItemAbility(this.handle, abilCode));
+  }
+
+  public getAbilityByIndex(index: number) {
+    return Ability.fromHandle(BlzGetItemAbilityByIndex(this.handle, index));
+  }
+
   public getField(field: itembooleanfield | itemintegerfield | itemrealfield | itemstringfield) {
     const fieldType = field.toString().substr(0, field.toString().indexOf(":"));
 
@@ -149,6 +158,10 @@ export class Item extends Widget {
 
   public isSellable() {
     return IsItemSellable(this.handle);
+  }
+
+  public removeAbility(abilCode: number) {
+    return BlzItemRemoveAbility(this.handle, abilCode);
   }
 
   public setDropId(unitId: number) {
