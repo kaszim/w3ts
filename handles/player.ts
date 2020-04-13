@@ -1,5 +1,3 @@
-/** @noSelfInFile **/
-
 import { Force } from "./force";
 import { Handle } from "./handle";
 import { Point } from "./point";

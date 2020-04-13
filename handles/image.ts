@@ -1,5 +1,3 @@
-/** @noSelfInFile **/
-
 import { Handle } from "./handle";
 
 export enum ImageType {

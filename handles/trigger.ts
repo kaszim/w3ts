@@ -1,5 +1,3 @@
-/** @noSelfInFile **/
-
 import { Dialog, DialogButton } from "./dialog";
 import { Frame } from "./frame";
 import { Handle } from "./handle";

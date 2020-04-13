@@ -1,5 +1,3 @@
-/** @noSelfInFile **/
-
 import { Handle } from "./handle";
 import { Point } from "./point";
 

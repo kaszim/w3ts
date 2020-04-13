@@ -1,5 +1,3 @@
-/** @noSelfInFile **/
-
 import { EventDispatcher } from "../common/index";
 
 const map: WeakMap<handle, any> = new WeakMap<handle, any>();

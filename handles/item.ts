@@ -1,5 +1,3 @@
-/** @noSelfInFile **/
-
 import { MapPlayer } from "./player";
 import { Point } from "./point";
 import { Widget } from "./widget";

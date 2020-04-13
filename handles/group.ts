@@ -1,5 +1,3 @@
-/** @noSelfInFile **/
-
 import { Handle } from "./handle";
 import { MapPlayer } from "./player";
 import { Point } from "./point";

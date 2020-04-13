@@ -1,5 +1,3 @@
-/** @noSelfInFile **/
-
 import { Handle } from "./handle";
 
 export class QuestItem extends Handle<questitem> {

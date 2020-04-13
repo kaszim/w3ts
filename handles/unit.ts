@@ -1,5 +1,3 @@
-/** @noSelfInFile **/
-
 import { Destructable } from "./destructable";
 import { Force } from "./force";
 import { Group } from "./group";
@@ -13,11 +11,7 @@ export class Unit extends Widget {
   public readonly handle!: unit;
 
   public static create(owner: MapPlayer, unitId: number, x: number, y: number, face: number, skinId?: number) {
-    return new this(
-      skinId
-        ? BlzCreateUnitWithSkin(owner.handle, unitId, x, y, face, skinId)
-        : CreateUnit(owner.handle, unitId, x, y, face)
-    );
+    return new this(this.createUnitHandle(owner, unitId, x, y, face, skinId));
   }
 
   public static foodMadeByType(unitId: number) {
@@ -46,6 +40,19 @@ export class Unit extends Widget {
 
   public static isUnitIdType(unitId: number, whichUnitType: unittype) {
     return IsUnitIdType(unitId, whichUnitType);
+  }
+
+  protected static createUnitHandle(
+    owner: MapPlayer,
+    unitId: number,
+    x: number,
+    y: number,
+    face: number,
+    skinId?: number
+  ) {
+    return skinId
+      ? BlzCreateUnitWithSkin(owner.handle, unitId, x, y, face, skinId)
+      : CreateUnit(owner.handle, unitId, x, y, face);
   }
 
   public get acquireRange() {

@@ -1,5 +1,3 @@
-/** @noSelfInFile **/
-
 import { Widget } from "./widget";
 
 export class Destructable extends Widget {
