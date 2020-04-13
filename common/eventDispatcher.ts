@@ -1,9 +1,13 @@
 export class EventDispatcher<Parameters extends any[], Returns> {
   private handlers: ((...args: Parameters) => Returns)[] = [];
 
+  public get isEmpty() {
+    return this.handlers.length === 0;
+  }
+
   public dispatch(...args: Parameters) {
     this.handlers.forEach((val, i) => {
-      val.apply(args);
+      val.apply(val, args);
     });
   }
 
