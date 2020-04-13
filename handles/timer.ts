@@ -41,7 +41,7 @@ export class Timer extends Handle<timer> {
     return this;
   }
 
-  public start(timeout: number, periodic: boolean, handlerFunc: () => void) {
+  public start(timeout: number, periodic: boolean, handlerFunc: (this: void) => void) {
     TimerStart(this.handle, timeout, periodic, handlerFunc);
     return this;
   }

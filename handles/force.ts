@@ -39,7 +39,7 @@ export class Force extends Handle<force> {
     ForceEnumPlayersCounted(this.handle, filter, countLimit);
   }
 
-  public for(callback: () => void) {
+  public for(callback: (this: void) => void) {
     ForForce(this.handle, callback);
   }
 

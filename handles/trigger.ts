@@ -50,7 +50,7 @@ export class Trigger extends Handle<trigger> {
     TriggerWaitOnSleeps(this.handle, flag);
   }
 
-  public addAction(actionFunc: () => void) {
+  public addAction(actionFunc: (this: void) => void) {
     return TriggerAddAction(this.handle, actionFunc);
   }
 

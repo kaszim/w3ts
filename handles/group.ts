@@ -87,7 +87,7 @@ export class Group extends Handle<group> {
     GroupEnumUnitsSelected(this.handle, whichPlayer.handle, filter);
   }
 
-  public for(callback: () => void) {
+  public for(callback: (this: void) => void) {
     ForGroup(this.handle, callback);
   }
 

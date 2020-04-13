@@ -48,11 +48,11 @@ export class Rectangle extends Handle<rect> {
     RemoveRect(this.handle);
   }
 
-  public enumDestructables(filter: boolexpr, actionFunc: () => void) {
+  public enumDestructables(filter: boolexpr, actionFunc: (this: void) => void) {
     EnumDestructablesInRect(this.handle, filter, actionFunc);
   }
 
-  public enumItems(filter: boolexpr, actionFunc: () => void) {
+  public enumItems(filter: boolexpr, actionFunc: (this: void) => void) {
     EnumItemsInRect(this.handle, filter, actionFunc);
   }
 
