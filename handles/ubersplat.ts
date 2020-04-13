@@ -22,6 +22,7 @@ export class Ubersplat extends Handle<ubersplat> {
   }
 
   public destroy() {
+    super.destroy();
     DestroyUbersplat(this.handle);
   }
 

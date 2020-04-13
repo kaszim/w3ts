@@ -116,6 +116,7 @@ export class Item extends Widget {
   }
 
   public destroy() {
+    super.destroy();
     RemoveItem(this.handle);
   }
 

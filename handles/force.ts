@@ -21,6 +21,7 @@ export class Force extends Handle<force> {
   }
 
   public destroy() {
+    super.destroy();
     DestroyForce(this.handle);
   }
 

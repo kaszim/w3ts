@@ -90,6 +90,7 @@ export class Quest extends Handle<quest> {
   }
 
   public destroy() {
+    super.destroy();
     DestroyQuest(this.handle);
   }
 

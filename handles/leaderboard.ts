@@ -45,6 +45,7 @@ export class Leaderboard extends Handle<leaderboard> {
   }
 
   public destroy() {
+    super.destroy();
     DestroyLeaderboard(this.handle);
   }
 

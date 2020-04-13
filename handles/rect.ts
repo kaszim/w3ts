@@ -46,6 +46,7 @@ export class Rectangle extends Handle<rect> {
   }
 
   public destroy() {
+    super.destroy();
     RemoveRect(this.handle);
   }
 

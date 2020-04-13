@@ -68,6 +68,7 @@ export class Effect extends Handle<effect> {
   }
 
   public destroy() {
+    super.destroy();
     DestroyEffect(this.handle);
   }
 

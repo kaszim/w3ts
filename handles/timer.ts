@@ -28,6 +28,7 @@ export class Timer extends Handle<timer> {
   }
 
   public destroy() {
+    super.destroy();
     DestroyTimer(this.handle);
     return this;
   }

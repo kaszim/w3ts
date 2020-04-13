@@ -36,6 +36,7 @@ export class Point extends Handle<location> {
   }
 
   public destroy() {
+    super.destroy();
     RemoveLocation(this.handle);
   }
 

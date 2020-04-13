@@ -22,4 +22,8 @@ export class Handle<T extends handle> {
   public get id() {
     return GetHandleId(this.handle);
   }
+
+  public destroy() {
+    map.delete(this.handle);
+  }
 }

@@ -136,6 +136,7 @@ export class Frame extends Handle<framehandle> {
   }
 
   public destroy() {
+    super.destroy();
     BlzDestroyFrame(this.handle);
   }
 

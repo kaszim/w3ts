@@ -88,6 +88,7 @@ export class Destructable extends Widget {
   }
 
   public destroy() {
+    super.destroy();
     RemoveDestructable(this.handle);
   }
 

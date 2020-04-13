@@ -494,6 +494,7 @@ export class Unit extends Widget {
   }
 
   public destroy() {
+    super.destroy();
     RemoveUnit(this.handle);
   }
 

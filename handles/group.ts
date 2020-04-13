@@ -45,6 +45,7 @@ export class Group extends Handle<group> {
   }
 
   public destroy() {
+    super.destroy();
     DestroyGroup(this.handle);
   }
 

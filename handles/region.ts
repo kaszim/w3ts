@@ -51,6 +51,7 @@ export class Region extends Handle<region> {
   }
 
   public destroy() {
+    super.destroy();
     RemoveRegion(this.handle);
   }
 }

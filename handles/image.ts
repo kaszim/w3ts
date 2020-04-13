@@ -31,6 +31,7 @@ export class Image extends Handle<image> {
   }
 
   public destroy() {
+    super.destroy();
     DestroyImage(this.handle);
   }
 

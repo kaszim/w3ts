@@ -21,6 +21,7 @@ export class TimerDialog extends Handle<timerdialog> {
   }
 
   public destroy() {
+    super.destroy();
     DestroyTimerDialog(this.handle);
   }
 

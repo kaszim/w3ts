@@ -61,6 +61,7 @@ export class Trigger extends Handle<trigger> {
   }
 
   public destroy() {
+    super.destroy();
     DestroyTrigger(this.handle);
   }
 
